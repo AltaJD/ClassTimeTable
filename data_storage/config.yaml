@@ -1,0 +1,53 @@
+# file configurations
+output: 'data_storage/classTimeTable.xlsx'
+input: 'data_storage/EIA_2324_Sem1_List_20230920-ok.xlsx'
+ac_file_path: 'data_storage/AC.pdf'
+testing_file: 'data_storage/test.csv'
+
+# academic calendar configuration
+start_month: 9 # Sept
+start_year: 2023
+weekends: [
+    'Sun',
+]
+# list of integers or 'all'
+ac_pdf_pages: [2, 3]
+
+# data preprocessing
+target_columns: [
+    'Venue',
+]
+student_num_col: ''
+
+required_columns: ['Subject',
+                   'Start',
+                   'End',
+                   'Task',
+                   'Date',
+                   'Weekday',
+                   'Module',
+                   'Gp',
+                   'Venue',
+                   'Staff']
+
+booking_format_staff: "[Start]-[End]\n[Venue]\n[Module]\n[Task]\n[Gp]\n[Staff]\n[Subject]"
+booking_format_venue: "[Start]-[End]\n[Module]\n[Task]\n[Gp]\n[Staff]\n[Subject]"
+
+
+# Formatting
+
+freeze_columns: 4
+freeze_rows: 1
+
+# colors
+cell_colors: {
+    public_holiday: '#ccbd616d',
+    booking: '#f0cad624',
+    leave: '#f081881d',
+    default: '#ffddebf7',
+    header: '#cc7d74dc',
+}
+
+# font style
+font_size: 10
+is_bold: False
