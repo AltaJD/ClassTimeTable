@@ -34,9 +34,10 @@ def time_diff(record) -> float:
 
 def get_students_num(record) -> int:
     """Function tries to find the column which should include the number of the students in the venue"""
-    column_name = get_config()['student_num_col']
+    column_name: str = get_config()['input_student_num_col']
     if len(column_name) == 0:
         return 0
+    column_name = column_name.strip('()')
     num = int(record[column_name])
     return num
 
@@ -160,8 +161,8 @@ def get_booking_details(df: pd.DataFrame, target_column: str, delimiter='|') -> 
             formatted_bookings[key].update(entry)
 
         """ Prepare statistics """
-        entry_h = {target_col+'(Hours)': time_difference}
-        entry_num = {target_col + '(Student Number)': number_students}
+        entry_h = {target_col+get_config()['output_hours_num_col']: time_difference}
+        entry_num = {target_col + get_config()['output_student_num_col']: number_students}
         if key not in record_stats.keys():
             record_stats[key] = entry_h
             if target_column == 'Venue':
@@ -345,10 +346,15 @@ def sort_df_columns(df: pd.DataFrame) -> list:
     cols_sorted = []
     for col_name in cols:
         cols_sorted.append(col_name)
-        col_name_h = col_name+'(Hours)'
+        col_name_h = col_name+get_config()['output_hours_num_col']
         if col_name_h in df.columns:
             cols_sorted.append(col_name_h)
-        col_name_num = col_name+'(Student Number)'
+        col_name_num = col_name+get_config()['output_student_num_col']
         if col_name_num in df.columns:
             cols_sorted.append(col_name_num)
     return cols_sorted
+
+
+def get_up_to_date(df: pd.DataFrame, day=1, month=get_config()['start_month'], year=get_config()['start_year']) -> pd.DataFrame:
+    date: str = datetime(day=day, month=month, year=year).strftime("%d-%b-%y")
+    return df[:date]

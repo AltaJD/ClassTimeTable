@@ -15,9 +15,13 @@ ac_pdf_pages: [2, 3]
 
 # data preprocessing
 target_columns: [
+    'Staff',
     'Venue',
 ]
-student_num_col: ''
+
+output_hours_num_col: '(Hours)'
+output_student_num_col: '(Student Number)'
+input_student_num_col: ''
 
 required_columns: ['Subject',
                    'Start',

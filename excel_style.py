@@ -30,7 +30,7 @@ def autoresize_columns(worksheet: Workbook.worksheets, starting_column=None, end
         bar.update()
         col_header = list(worksheet.columns)[col-1][0]
         header_text = str(col_header.value)
-        if '(Hours)' in header_text or '(Student Number)' in header_text:
+        if get_config()['output_hours_num_col'].strip('()') in header_text or get_config()['output_student_num_col'].strip('()') in header_text:
             width = max(1, int(column_width/4))
             dim_holder[get_column_letter(col)] = ColumnDimension(worksheet, min=col, max=col, width=width)
             continue
