@@ -9,7 +9,6 @@ from time import time
 
 
 def autoresize_columns(worksheet: Workbook.worksheets, starting_column=None, ending_column=None, column_width=20):
-    # TODO: do not resize the columns with hours and student number
     """ The width of each column is adjusted.
     The function consider the largest width of the cell within a columns
     The starting column cannot be 0

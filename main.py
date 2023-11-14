@@ -53,10 +53,25 @@ if __name__ == '__main__':
                                         how='outer')
             df.drop_duplicates(inplace=True)
 
+            """ Add total into column name """
+            new_column_names = {}
+            for col in df.columns:
+                if '(Hours)' not in col and '(Student Number)' not in col:
+                    continue
+                total: str = str(int(df[col].sum(skipna=True)))
+                # reformat the column name to "Venue1(Hours:total)" and "Venue1(Student Number:total)"
+                previous_col = col
+                col = col[:len(col)-1]+':'+total+col[len(col)-1]
+                # store previous column name and new column name
+                new_column_names[previous_col] = col
+            print('NEW COLUMN NAMES')
+            print(new_column_names)
+            df.rename(columns=new_column_names, inplace=True)
+
             """ ===== Indicate the holidays on the main dataframe ===== """
             unique_names = dp.get_unique_values(df_org, column_name=target_column)
             cols = dp.sort_df_columns(df)
-            cols = [col for col in cols if col in unique_names] # exclude column names which does not have target column values
+            cols = [col for col in cols if col in unique_names or '(Hours)' in col or '(Student Number)' in col] # exclude column names which does not have target column values
             df.loc[df['Day'].isin(weekends), cols] = 'PH'
             df.loc[df['Date'].isin(dp.get_unique_values(holidays, column_name='Date')), cols] = 'PH'
 
@@ -73,15 +88,16 @@ if __name__ == '__main__':
             df.to_csv('data_storage/test.csv')  # save the dataframe in csv file
             df.to_excel(writer, sheet_name=target_column)
 
-    """ ==== Change excel style ==== """
-    for worksheet_name in target_columns:
-        workbook: Workbook = openpyxl.load_workbook(filename=output_file_path, read_only=False)
-        ws = workbook[worksheet_name]
-        es.adjust_text_alignment(worksheet=ws)
-        # autoresize all columns
-        es.autoresize_columns(worksheet=ws)
-        es.freeze(worksheet=ws, columns=fixed_columns, rows=fixed_rows)
-        # autoresize freeze columns
-        # es.autoresize_columns(worksheet=ws, starting_column=1, ending_column=fixed_columns, column_width=10)
-        workbook.save(filename=output_file_path)
-        print(10 * '=' + 'NEW CLASS TIMETABLE HAS BEEN SAVED' + '=' * 10)
+
+    # """ ==== Change excel style ==== """
+    # for worksheet_name in target_columns:
+    #     workbook: Workbook = openpyxl.load_workbook(filename=output_file_path, read_only=False)
+    #     ws = workbook[worksheet_name]
+    #     es.adjust_text_alignment(worksheet=ws)
+    #     # autoresize all columns
+    #     es.autoresize_columns(worksheet=ws)
+    #     es.freeze(worksheet=ws, columns=fixed_columns, rows=fixed_rows)
+    #     # autoresize freeze columns
+    #     # es.autoresize_columns(worksheet=ws, starting_column=1, ending_column=fixed_columns, column_width=10)
+    #     workbook.save(filename=output_file_path)
+    #     print(10 * '=' + 'NEW CLASS TIMETABLE HAS BEEN SAVED' + '=' * 10)

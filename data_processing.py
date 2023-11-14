@@ -337,12 +337,12 @@ def get_holidays(ac_path: str, pdf_pages) -> pd.DataFrame:
 
 
 def sort_df_columns(df: pd.DataFrame) -> list:
-    # get the unique names of columns excluding content of ()
-    cols: list[str] = [col_name for col_name in df.columns if '(' not in col_name]
-    cols_sorted = []
     """ Sort the column names according to the format:
     ['Venue1', 'Venue1(Hours)', 'Venue1(Student Number)', 'Venue2', 'Venue2(Hours)', ...]
     """
+    # get the unique names of columns excluding content of ()
+    cols: list[str] = [col_name for col_name in df.columns if '(' not in col_name]
+    cols_sorted = []
     for col_name in cols:
         cols_sorted.append(col_name)
         col_name_h = col_name+'(Hours)'
