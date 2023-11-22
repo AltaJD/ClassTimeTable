@@ -1,6 +1,6 @@
 # file configurations
 output: 'data_storage/classTimeTable.xlsx'
-input: 'data_storage/EIA_2324_Sem1_List_20230920-ok.xlsx'
+input: 'data_storage/EIA_2324_Sem1_List_20231115.xlsx'
 ac_file_path: 'data_storage/AC.pdf'
 testing_file: 'data_storage/test.csv'
 
@@ -34,7 +34,7 @@ required_columns: ['Subject',
                    'Venue',
                    'Staff']
 
-booking_format_staff: "[Start]-[End]\n[Venue]\n[Module]\n[Task]\n[Gp]\n[Staff]\n[Subject]"
+booking_format_staff: "[Start]-[End]\n[Venue]\n[Module]\n[Task]\n[Gp]\n[Subject]"
 booking_format_venue: "[Start]-[End]\n[Module]\n[Task]\n[Gp]\n[Staff]\n[Subject]"
 
 
@@ -46,10 +46,10 @@ freeze_rows: 1
 # colors
 cell_colors: {
     public_holiday: '#ccbd616d',
-    booking: '#f0cad624',
+    booking: '#ff6889aa',
     leave: '#f081881d',
     default: '#ffddebf7',
-    header: '#cc7d74dc',
+    header: '#ff012875',
 }
 
 # font style

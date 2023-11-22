@@ -95,10 +95,10 @@ if __name__ == '__main__':
             print(f'{df.shape[0] - ac_df.shape[0]} new rows were added')
 
             """ ==== Show up to certain day ==== """
-            df = dp.get_up_to_date(df, month=12)
+            df = dp.get_up_to_date(df, month=2, year=2024)
 
             """ ==== Add the dataframe to workbook ==== """
-            df.to_csv('data_storage/test.csv')  # save the dataframe in csv file
+            # df.to_csv('data_storage/test.csv')  # save the dataframe in csv file
             df.to_excel(writer, sheet_name=target_column)
 
     """ ==== Change excel style ==== """

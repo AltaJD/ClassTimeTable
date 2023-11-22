@@ -1,7 +1,7 @@
 from openpyxl import Workbook
 from openpyxl.worksheet.dimensions import ColumnDimension, DimensionHolder
 from openpyxl.utils import get_column_letter
-from openpyxl.styles import Alignment, PatternFill, Border, Side, Font
+from openpyxl.styles import Alignment, PatternFill, Border, Side, Font, Color
 from config import get_config
 import sys
 from tqdm import tqdm
@@ -33,6 +33,7 @@ def autoresize_columns(worksheet: Workbook.worksheets, starting_column=None, end
         if get_config()['output_hours_num_col'].strip('()') in header_text or get_config()['output_student_num_col'].strip('()') in header_text:
             width = max(1, int(column_width/4))
             dim_holder[get_column_letter(col)] = ColumnDimension(worksheet, min=col, max=col, width=width)
+            col_header.value = int(format_statistics_column_header(header_text))
             continue
         dim_holder[get_column_letter(col)] = ColumnDimension(worksheet, min=col, max=col, width=column_width)
     bar.close()
@@ -41,6 +42,8 @@ def autoresize_columns(worksheet: Workbook.worksheets, starting_column=None, end
 
 
 def adjust_text_alignment(worksheet: Workbook.worksheets):
+    font_size = get_config()['font_size']
+    header_font_color = Color(rgb=formatted_color('#ffffffff'))
     row_count: int = worksheet.max_row
     column_count: int = worksheet.max_column
     total: int = row_count*column_count
@@ -51,6 +54,11 @@ def adjust_text_alignment(worksheet: Workbook.worksheets):
         top=side,
         bottom=side,
     )
+    thin_side = Side(style='thin')
+    thin_border = Border(left=thin_side,
+                         right=thin_side,
+                         top=thin_side,
+                         bottom=thin_side)
     start_time = time()
     bar: tqdm = tqdm(total=total, disable=False)
     col_num = 0
@@ -76,6 +84,7 @@ def adjust_text_alignment(worksheet: Workbook.worksheets):
                                                                  vertical='center',
                                                                  horizontal='center')
                 set_column_header_color(worksheet, cell)
+                set_font(cell, size=font_size, color=header_font_color)
                 continue
             worksheet[cell.coordinate].alignment = Alignment(wrap_text=True, horizontal='center')
 
@@ -83,7 +92,7 @@ def adjust_text_alignment(worksheet: Workbook.worksheets):
             cell.border = no_border
 
             """ === Set font style ==="""
-            set_font(cell, size=10)
+            set_font(cell, size=font_size)
 
             """=== Set cell color ==="""
             if row_num % 2 == 0:
@@ -96,6 +105,7 @@ def adjust_text_alignment(worksheet: Workbook.worksheets):
                 set_leave_color(worksheet, cell)
             elif is_booking:
                 set_booking_color(worksheet, cell)
+                cell.border = thin_border
     bar.close()
     print('='*5+f'CELL STYLE HAS BEEN ADDED'+5*'=')
     print('Time: ', time()-start_time)
@@ -103,6 +113,18 @@ def adjust_text_alignment(worksheet: Workbook.worksheets):
 
 def formatted_color(color: str):
     return color.replace('#', '').upper()
+
+
+def format_statistics_column_header(text: str) -> str:
+    # keep what is inside the round brackets ()
+    text = text.strip('()')
+    # keep only numbers after semicolon :
+    text = text.split(':')[1]
+    return text.strip()
+
+
+def update_cell_text(cell, new_value: str) -> None:
+    cell.value = new_value
 
 
 def convert_to_column_name(column_number: int) -> str:
@@ -169,6 +191,6 @@ def freeze(worksheet, columns: int, rows: int) -> None:
     print(f'{columns} columns and {rows} rows have been freeze')
 
 
-def set_font(cell, size: int, is_bold=False) -> None:
-    font = Font(size=str(size), bold=is_bold)
+def set_font(cell, size: int, is_bold=False, color=None) -> None:
+    font = Font(size=str(size), bold=is_bold, color=color)
     cell.font = font

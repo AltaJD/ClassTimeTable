@@ -214,7 +214,7 @@ def get_dates_in_ac(start_year: int, start_month: int, end_year=None, end_month=
     else:
         end_date = datetime(year=end_year, month=end_month, day=1)
     """ == Define patterns == """
-    date_format = "%d-%b-%y" # dd-MonthName-yy
+    date_format = "%d-%b-%Y" # dd-MonthName-yyyy
     day_name = "%a" # Friday, Monday, etc.
     # org_date_format = '%Y-%m-%d' # time format yyyy-mm-dd used in the
     """ ==== Compress the data into list[dict] ==== """
@@ -356,5 +356,5 @@ def sort_df_columns(df: pd.DataFrame) -> list:
 
 
 def get_up_to_date(df: pd.DataFrame, day=1, month=get_config()['start_month'], year=get_config()['start_year']) -> pd.DataFrame:
-    date: str = datetime(day=day, month=month, year=year).strftime("%d-%b-%y")
+    date: str = datetime(day=day, month=month, year=year).strftime("%d-%b-%Y")
     return df[:date]
